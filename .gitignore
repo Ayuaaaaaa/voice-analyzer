@@ -1,0 +1,15 @@
+# Outputs that may contain confidential call content
+work/
+/results/
+data/
+uploads/
+jobs/
+
+# Downloaded model weights; the small trained emotion heads are versioned
+models/*
+!models/emotion_heads.joblib
+
+.env
+deploy/hf_token
+__pycache__/
+*.pyc

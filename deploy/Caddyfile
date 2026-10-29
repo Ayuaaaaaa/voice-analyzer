@@ -1,0 +1,9 @@
+{$DOMAIN} {
+	encode gzip
+	reverse_proxy app:7860 {
+		transport http {
+			read_timeout 30m
+			write_timeout 30m
+		}
+	}
+}

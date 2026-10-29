@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Sign in · AutoAce Voice Analyzer</title>
+<style>
+  :root { --bg:#f5f6f8; --card:#fff; --ink:#1d2330; --muted:#6b7385; --line:#e3e6ec; --accent:#2457d6; --bad:#c62f3a; }
+  * { box-sizing: border-box; }
+  body { margin:0; font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--ink);
+         display:flex; min-height:100vh; align-items:center; justify-content:center; }
+  form { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:32px; width:340px; box-shadow:0 4px 18px rgba(20,30,60,.06); }
+  h1 { font-size:19px; margin:0 0 4px; }
+  p.sub { color:var(--muted); margin:0 0 22px; font-size:13px; }
+  label { display:block; font-size:13px; color:var(--muted); margin:12px 0 4px; }
+  input { width:100%; padding:9px 11px; border:1px solid var(--line); border-radius:8px; font-size:15px; }
+  input:focus { outline:2px solid #c9d6f7; border-color:var(--accent); }
+  button { margin-top:20px; width:100%; padding:10px; border:0; border-radius:8px; background:var(--accent); color:#fff; font-size:15px; cursor:pointer; }
+  .err { color:var(--bad); font-size:13px; margin-top:12px; min-height:1em; }
+</style>
+</head>
+<body>
+<form method="post" action="/login">
+  <h1>AutoAce Voice Analyzer</h1>
+  <p class="sub">Emotional tone &amp; background-noise analysis</p>
+  <label for="u">Username</label>
+  <input id="u" name="username" autocomplete="username" required autofocus>
+  <label for="p">Password</label>
+  <input id="p" name="password" type="password" autocomplete="current-password" required>
+  <button type="submit">Sign in</button>
+  <div class="err" id="err"></div>
+</form>
+<script>
+  const e = new URLSearchParams(location.search).get("error");
+  if (e) document.getElementById("err").textContent =
+    e === "locked" ? "Too many attempts. Please wait 5 minutes." : "Incorrect username or password.";
+</script>
+</body>
+</html>

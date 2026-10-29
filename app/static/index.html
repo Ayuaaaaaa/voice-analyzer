@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>AutoAce Voice Analyzer</title>
+<style>
+  :root { --bg:#f5f6f8; --card:#fff; --ink:#1d2330; --muted:#6b7385; --line:#e3e6ec; --accent:#2457d6;
+          --ok:#1d8a4e; --okbg:#e6f5ec; --bad:#c62f3a; --badbg:#fdecee; --warn:#9a6700; --warnbg:#fff6dd; --info:#eef2fc; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--ink); }
+  header { background:var(--card); border-bottom:1px solid var(--line); padding:12px 24px; display:flex; align-items:center; gap:14px; }
+  header h1 { font-size:17px; margin:0; flex:1; }
+  main { max-width:1280px; margin:0 auto; padding:20px 24px 60px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:16px; }
+  .card h2 { font-size:15px; margin:0 0 12px; }
+  .muted { color:var(--muted); }
+  .small { font-size:12px; }
+  button, .btn { border:1px solid var(--line); background:#fff; color:var(--ink); padding:7px 14px; border-radius:8px; cursor:pointer; font-size:14px; text-decoration:none; display:inline-block; }
+  button.primary, .btn.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  button:disabled { opacity:.5; cursor:not-allowed; }
+  .pill { display:inline-block; padding:2px 9px; border-radius:999px; font-size:12px; background:var(--info); color:var(--accent); white-space:nowrap; }
+  .pill.ok { background:var(--okbg); color:var(--ok); } .pill.bad { background:var(--badbg); color:var(--bad); }
+  .pill.warn { background:var(--warnbg); color:var(--warn); } .pill.grey { background:#eef0f3; color:var(--muted); }
+  #drop { border:2px dashed #c4cbd8; border-radius:10px; padding:26px; text-align:center; transition:.15s; }
+  #drop.over { border-color:var(--accent); background:var(--info); }
+  #drop .row { display:flex; gap:10px; justify-content:center; margin-top:12px; flex-wrap:wrap; }
+  .bar { height:10px; background:#e9ecf2; border-radius:999px; overflow:hidden; }
+  .bar > div { height:100%; background:var(--accent); width:0; transition:width .3s; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; margin:12px 0; }
+  .stat { background:#f8f9fb; border:1px solid var(--line); border-radius:8px; padding:8px 12px; }
+  .stat b { display:block; font-size:18px; }
+  .issues { margin:8px 0 0; padding-left:18px; } .issues li { margin:2px 0; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th, td { text-align:left; padding:7px 8px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { color:var(--muted); font-weight:600; font-size:12px; white-space:nowrap; position:sticky; top:0; background:#fff; }
+  tr.file { cursor:pointer; } tr.file:hover td { background:#fafbfd; }
+  td.mis { background:var(--badbg); }
+  td.mis .exp { display:block; color:var(--bad); font-size:11px; }
+  tr.detail td { background:#fafbfd; }
+  pre { margin:0; white-space:pre-wrap; word-break:break-word; font:12px/1.45 ui-monospace,Consolas,monospace; background:#f3f5f9; padding:10px; border-radius:8px; }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:14px; } @media (max-width:900px){ .two{grid-template-columns:1fr;} }
+  .hidden { display:none !important; }
+  .scroll { overflow-x:auto; }
+  .cm td, .cm th { text-align:center; } .cm td.diag { font-weight:700; background:var(--okbg); }
+  .err { color:var(--bad); }
+  ul.jobs { list-style:none; padding:0; margin:0; } ul.jobs li { padding:6px 0; border-bottom:1px solid var(--line); display:flex; gap:10px; align-items:center; }
+  ul.jobs a { color:var(--accent); cursor:pointer; text-decoration:none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>AutoAce Voice Analyzer</h1>
+  <span id="modelStatus" class="pill grey">checking models…</span>
+  <form method="post" action="/logout" style="margin:0"><button type="submit">Sign out</button></form>
+</header>
+<main>
+  <section class="card">
+    <h2>1. Upload an evaluation batch</h2>
+    <p class="muted small" style="margin-top:-6px">
+      Upload a <b>ZIP archive</b> or a <b>folder</b> containing the audio files at its root plus one CSV manifest
+      with columns <code>name</code> (exact filename incl. extension) and <code>result_json</code> (may be empty).
+      Supported audio: wav, mp3, ogg/opus, flac, m4a/aac, webm, wma, amr, mp4.
+    </p>
+    <div id="drop">
+      <div>Drag a ZIP file or a folder here</div>
+      <div class="row">
+        <button id="pickZip">Choose ZIP…</button>
+        <button id="pickFolder">Choose folder…</button>
+      </div>
+      <input type="file" id="zipInput" accept=".zip" class="hidden">
+      <input type="file" id="folderInput" webkitdirectory directory multiple class="hidden">
+      <div id="selection" class="small muted" style="margin-top:12px"></div>
+    </div>
+    <div style="margin-top:12px; display:flex; gap:10px; align-items:center">
+      <button id="submit" class="primary" disabled>Validate &amp; analyse</button>
+      <div style="flex:1" class="hidden" id="upWrap"><div class="bar"><div id="upBar"></div></div><div class="small muted" id="upText"></div></div>
+    </div>
+    <div id="uploadErr" class="err" style="margin-top:8px"></div>
+  </section>
+
+  <section class="card hidden" id="jobCard">
+    <h2>2. Batch <span id="jobId" class="muted"></span> <span id="jobState" class="pill"></span></h2>
+    <div class="bar"><div id="progBar"></div></div>
+    <div class="grid" id="stats"></div>
+    <div id="current" class="small muted"></div>
+    <div id="validation"></div>
+    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap">
+      <a class="btn primary" id="dlCsv">Download CSV</a>
+      <a class="btn" id="dlJson">Download JSON (with reasons &amp; errors)</a>
+    </div>
+  </section>
+
+  <section class="card hidden" id="cmpCard">
+    <h2>Comparison with labels in the manifest</h2>
+    <div class="two">
+      <div class="scroll"><table id="fieldAcc"></table></div>
+      <div class="scroll"><div class="small muted">Emotional tone: rows = label, columns = prediction</div><table class="cm" id="toneCm"></table></div>
+    </div>
+  </section>
+
+  <section class="card hidden" id="resCard">
+    <h2>3. Results <span class="muted small">(click a row for the full JSON and the reasoning)</span></h2>
+    <div class="scroll"><table id="results"></table></div>
+  </section>
+
+  <section class="card">
+    <h2>Recent batches</h2>
+    <ul class="jobs" id="jobs"><li class="muted">none yet</li></ul>
+  </section>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+function el(tag, attrs = {}, ...kids) {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") n.className = v; else if (k === "onclick") n.onclick = v; else if (v != null) n.setAttribute(k, v);
+  }
+  for (const k of kids.flat()) if (k != null) n.append(k instanceof Node ? k : document.createTextNode(String(k)));
+  return n;
+}
+const fmtSec = (s) => s == null ? "–" : s < 60 ? `${Math.round(s)} s` : `${Math.floor(s / 60)} min ${Math.round(s % 60)} s`;
+const fmtMB = (b) => (b / 1048576).toFixed(1) + " MB";
+
+// ---------------- selection ----------------
+let selected = [];   // [{file, path}]
+function setSelection(items, label) {
+  selected = items;
+  const size = items.reduce((a, x) => a + x.file.size, 0);
+  $("selection").textContent = items.length ? `${label}: ${items.length} file(s), ${fmtMB(size)}` : "";
+  $("submit").disabled = !items.length;
+  $("uploadErr").textContent = "";
+}
+$("pickZip").onclick = () => $("zipInput").click();
+$("pickFolder").onclick = () => $("folderInput").click();
+$("zipInput").onchange = (e) => { const f = e.target.files[0]; if (f) setSelection([{ file: f, path: f.name }], "ZIP"); };
+$("folderInput").onchange = (e) => {
+  const files = [...e.target.files];
+  setSelection(files.map(f => ({ file: f, path: f.webkitRelativePath || f.name })), "Folder");
+};
+const drop = $("drop");
+drop.ondragover = (e) => { e.preventDefault(); drop.classList.add("over"); };
+drop.ondragleave = () => drop.classList.remove("over");
+drop.ondrop = async (e) => {
+  e.preventDefault(); drop.classList.remove("over");
+  const entries = [...e.dataTransfer.items].map(i => i.webkitGetAsEntry && i.webkitGetAsEntry()).filter(Boolean);
+  const out = [];
+  async function walk(entry, prefix) {
+    if (entry.isFile) {
+      const file = await new Promise((res, rej) => entry.file(res, rej));
+      out.push({ file, path: prefix + file.name });
+    } else if (entry.isDirectory) {
+      const reader = entry.createReader();
+      let batch;
+      do {
+        batch = await new Promise((res, rej) => reader.readEntries(res, rej));
+        for (const c of batch) await walk(c, prefix + entry.name + "/");
+      } while (batch.length);
+    }
+  }
+  for (const en of entries) await walk(en, "");
+  const label = out.length === 1 && out[0].path.toLowerCase().endsWith(".zip") ? "ZIP" : "Dropped";
+  setSelection(out, label);
+};
+
+// ---------------- upload ----------------
+$("submit").onclick = () => {
+  if (!selected.length) return;
+  const fd = new FormData();
+  for (const s of selected) fd.append("files", s.file, s.path);
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "/api/jobs");
+  $("upWrap").classList.remove("hidden"); $("submit").disabled = true; $("uploadErr").textContent = "";
+  xhr.upload.onprogress = (e) => {
+    if (!e.lengthComputable) return;
+    const p = 100 * e.loaded / e.total;
+    $("upBar").style.width = p + "%";
+    $("upText").textContent = p < 100 ? `Uploading… ${p.toFixed(0)}% of ${fmtMB(e.total)}` : "Upload complete, validating…";
+  };
+  xhr.onload = () => {
+    $("submit").disabled = false;
+    let body = {};
+    try { body = JSON.parse(xhr.responseText); } catch {}
+    if (xhr.status === 401) { location.href = "/login"; return; }
+    if (xhr.status >= 400) { $("uploadErr").textContent = "Batch rejected: " + (body.detail || xhr.statusText); $("upWrap").classList.add("hidden"); return; }
+    $("upText").textContent = "Uploaded.";
+    showJob(body.id);
+    loadJobs();
+  };
+  xhr.onerror = () => { $("submit").disabled = false; $("uploadErr").textContent = "Network error during upload."; };
+  xhr.send(fd);
+};
+
+// ---------------- job view ----------------
+let currentJob = null, pollTimer = null, openRows = new Set();
+function showJob(id) {
+  currentJob = id; openRows = new Set();
+  location.hash = id;
+  $("jobCard").classList.remove("hidden");
+  $("dlCsv").href = `/api/jobs/${id}/results.csv`;
+  $("dlJson").href = `/api/jobs/${id}/results.json`;
+  poll();
+}
+async function poll() {
+  clearTimeout(pollTimer);
+  if (!currentJob) return;
+  const r = await fetch(`/api/jobs/${currentJob}`);
+  if (r.status === 401) { location.href = "/login"; return; }
+  if (!r.ok) { $("jobState").textContent = "not found"; return; }
+  const j = await r.json();
+  render(j);
+  if (j.state === "queued" || j.state === "running") pollTimer = setTimeout(poll, 2000);
+  else loadJobs();
+}
+const STATE_PILL = { queued: "grey", running: "", done: "ok", failed: "bad" };
+function render(j) {
+  $("jobId").textContent = j.id + " · " + j.source;
+  $("jobState").textContent = j.state === "queued" && !j.models_ready ? "waiting for models to load" :
+                              j.state === "queued" && j.queue_position ? `queued (#${j.queue_position + 1})` : j.state;
+  $("jobState").className = "pill " + (STATE_PILL[j.state] || "");
+  const c = j.counts, finished = c.done + c.failed + c.skipped;
+  $("progBar").style.width = (c.total ? 100 * finished / c.total : 0) + "%";
+  $("stats").replaceChildren(
+    stat("Files", c.total), stat("Analysed", c.done), stat("Failed", c.failed), stat("Skipped", c.skipped),
+    stat("Remaining", c.pending + c.running),
+    stat("Audio analysed", fmtSec(j.audio_seconds)), stat("Elapsed", fmtSec(j.elapsed_seconds)),
+    stat("Est. remaining", j.state === "running" ? fmtSec(j.eta_seconds) : "–"),
+  );
+  $("current").textContent = j.current ? `Analysing: ${j.current}` : (j.error ? "" : "");
+  if (j.error) $("current").replaceChildren(el("span", { class: "err" }, j.error));
+  renderValidation(j.validation, c);
+  renderComparison(j.comparison);
+  renderResults(j.files, j.validation.has_labels);
+}
+function stat(label, value) { return el("div", { class: "stat" }, el("span", { class: "small muted" }, label), el("b", {}, value)); }
+
+function renderValidation(v, c) {
+  const box = $("validation"); box.replaceChildren();
+  const lines = [];
+  lines.push(el("div", { class: "small" }, "Manifest: ", el("b", {}, v.manifest_name || "none"),
+    v.has_labels ? el("span", { class: "pill ok", style: "margin-left:8px" }, "labels found – predictions will be compared") : null));
+  const issue = (title, list, cls) => list && list.length ? el("div", { style: "margin-top:8px" },
+    el("span", { class: "pill " + cls }, `${title}: ${list.length}`),
+    el("ul", { class: "issues small" }, list.slice(0, 50).map(x => el("li", {}, x)), list.length > 50 ? el("li", {}, `… and ${list.length - 50} more`) : null)) : null;
+  lines.push(issue("Listed in CSV but missing from upload", v.missing_audio, "bad"));
+  lines.push(issue("Uploaded but not listed in CSV (still analysed)", v.not_in_manifest, "warn"));
+  lines.push(issue("Duplicate CSV rows (analysed once)", v.duplicate_rows, "warn"));
+  lines.push(issue("Unsupported file types", v.unsupported, "bad"));
+  lines.push(issue("Files in sub-folders (ignored)", v.nested_ignored, "warn"));
+  lines.push(issue("Warnings", v.warnings, "warn"));
+  if (!lines.slice(1).some(Boolean)) lines.push(el("div", { style: "margin-top:8px" }, el("span", { class: "pill ok" }, "Batch valid: every manifest row has a matching audio file")));
+  box.append(...lines.filter(Boolean));
+}
+
+const FIELDS = ["emotional_tone", "emotional_intensity", "background_noise_present", "background_noise_type",
+  "background_noise_severity", "audio_quality", "speaker_overlap_present", "long_silence_present"];
+const SHORT = { emotional_tone: "Tone", emotional_intensity: "Intensity", background_noise_present: "Noise",
+  background_noise_type: "Noise type", background_noise_severity: "Noise severity", audio_quality: "Audio quality",
+  speaker_overlap_present: "Overlap", long_silence_present: "Long silence" };
+const STATUS_PILL = { done: "ok", failed: "bad", skipped: "grey", pending: "grey", running: "" };
+
+function renderResults(files, hasLabels) {
+  $("resCard").classList.remove("hidden");
+  const head = el("tr", {}, el("th", {}, "File"), el("th", {}, "Status"), FIELDS.map(f => el("th", {}, SHORT[f])),
+    el("th", {}, "Confidence"), el("th", {}, "Audio"), el("th", {}, "Time"));
+  const rows = [head];
+  for (const f of files) {
+    const r = f.result;
+    const cells = FIELDS.map(k => {
+      if (!r) return el("td", {}, "");
+      const val = r[k] === "" ? "—" : String(r[k]);
+      const mismatch = f.matches && f.matches[k] === false;
+      return el("td", { class: mismatch ? "mis" : "" }, val,
+        mismatch ? el("span", { class: "exp" }, "label: " + (f.label[k] === "" ? "—" : String(f.label[k]))) : null);
+    });
+    const status = el("td", {}, el("span", { class: "pill " + (STATUS_PILL[f.status] || "") }, f.status),
+      f.error ? el("div", { class: "small err" }, f.error) : null,
+      (f.warnings || []).map(w => el("div", { class: "small muted" }, w)));
+    const tr = el("tr", { class: "file", onclick: () => { openRows.has(f.name) ? openRows.delete(f.name) : openRows.add(f.name); renderResults(files, hasLabels); } },
+      el("td", {}, f.name), status, cells,
+      el("td", {}, r ? r.confidence.toFixed(2) : ""), el("td", {}, f.duration ? fmtSec(f.duration) : ""),
+      el("td", {}, f.elapsed != null ? fmtSec(f.elapsed) : ""));
+    rows.push(tr);
+    if (openRows.has(f.name)) {
+      rows.push(el("tr", { class: "detail" }, el("td", { colspan: FIELDS.length + 5 },
+        el("div", { class: "two" },
+          el("div", {}, el("div", { class: "small muted" }, "result_json"), el("pre", {}, r ? JSON.stringify(r, null, 2) : (f.error || "no result"))),
+          el("div", {}, el("div", { class: "small muted" }, "Why"), el("pre", {}, (f.reasons || []).join("\n") || "–"),
+            f.label ? [el("div", { class: "small muted", style: "margin-top:8px" }, "Label from manifest"), el("pre", {}, JSON.stringify(f.label, null, 2))] : null)))));
+    }
+  }
+  $("results").replaceChildren(...rows);
+}
+
+function renderComparison(cmp) {
+  if (!cmp) { $("cmpCard").classList.add("hidden"); return; }
+  $("cmpCard").classList.remove("hidden");
+  const acc = [el("tr", {}, el("th", {}, `Field (n = ${cmp.n})`), el("th", {}, "Correct"), el("th", {}, "Accuracy"))];
+  for (const [k, v] of Object.entries(cmp.per_field)) {
+    if (!v.total) continue;
+    acc.push(el("tr", {}, el("td", {}, SHORT[k] || k), el("td", {}, `${v.correct} / ${v.total}`), el("td", {}, (100 * v.accuracy).toFixed(0) + "%")));
+  }
+  $("fieldAcc").replaceChildren(...acc);
+  const tones = Object.keys(cmp.tone_confusion);
+  const cm = [el("tr", {}, el("th", {}, ""), tones.map(t => el("th", {}, t)))];
+  for (const t of tones) cm.push(el("tr", {}, el("th", {}, t), tones.map(p => el("td", { class: p === t ? "diag" : "" }, cmp.tone_confusion[t][p] || ""))));
+  $("toneCm").replaceChildren(...cm);
+}
+
+// ---------------- jobs list & health ----------------
+async function loadJobs() {
+  const r = await fetch("/api/jobs"); if (!r.ok) return;
+  const jobs = await r.json();
+  if (!jobs.length) return;
+  $("jobs").replaceChildren(...jobs.map(j => el("li", {},
+    el("a", { onclick: () => showJob(j.id) }, j.id), el("span", { class: "pill " + (STATE_PILL[j.state] || "") }, j.state),
+    el("span", { class: "small muted" }, `${j.source} · ${j.counts.total} files · ${new Date(j.created * 1000).toLocaleString()}`))));
+}
+async function health() {
+  try {
+    const h = await (await fetch("/api/health")).json();
+    const s = $("modelStatus");
+    if (h.model_error) { s.className = "pill bad"; s.textContent = "model error: " + h.model_error; return; }
+    s.className = "pill " + (h.models_ready ? "ok" : "warn");
+    s.textContent = h.models_ready ? "models ready" : "loading models (about 1 min after start-up)…";
+    if (!h.models_ready) setTimeout(health, 3000);
+  } catch { setTimeout(health, 5000); }
+}
+health(); loadJobs();
+if (location.hash.length > 1) showJob(location.hash.slice(1));
+</script>
+</body>
+</html>

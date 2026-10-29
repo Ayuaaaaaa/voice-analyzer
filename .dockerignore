@@ -1,0 +1,10 @@
+.git
+work/
+results/
+data/
+uploads/
+jobs/
+deploy/.env
+deploy/hf_token
+**/__pycache__
+*.pyc

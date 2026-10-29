@@ -1,0 +1,31 @@
+# Single-VM deployment: the analyzer behind Caddy (automatic HTTPS).
+# Needs deploy/.env (VA_USERNAME, VA_PASSWORD, VA_SECRET, DOMAIN) and deploy/hf_token for the build.
+services:
+  app:
+    build:
+      context: ..
+      secrets: [HF_TOKEN]
+    env_file: .env
+    environment:
+      VA_THREADS: "4"
+      OMP_NUM_THREADS: "4"
+    restart: always
+    expose: ["7860"]
+
+  caddy:
+    image: caddy:2
+    restart: always
+    ports: ["80:80", "443:443"]
+    environment:
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+    depends_on: [app]
+
+secrets:
+  HF_TOKEN:
+    file: ./hf_token
+
+volumes:
+  caddy_data:

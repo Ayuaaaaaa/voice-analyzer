@@ -1,0 +1,437 @@
+{
+  "config": {
+    "data": "both",
+    "C": 0.5,
+    "balance": true
+  },
+  "n_dev": 3903,
+  "n_test": 3774,
+  "tone_ravdess": {
+    "n": 576,
+    "accuracy": 0.783,
+    "macro_f1": 0.771,
+    "per_class": {
+      "neutral": {
+        "precision": 0.723,
+        "recall": 0.924,
+        "f1-score": 0.811,
+        "support": 144.0
+      },
+      "satisfied": {
+        "precision": 0.879,
+        "recall": 0.604,
+        "f1-score": 0.716,
+        "support": 96.0
+      },
+      "frustrated": {
+        "precision": 0.784,
+        "recall": 0.806,
+        "f1-score": 0.795,
+        "support": 144.0
+      },
+      "upset": {
+        "precision": 0.691,
+        "recall": 0.792,
+        "f1-score": 0.738,
+        "support": 48.0
+      },
+      "distressed": {
+        "precision": 0.862,
+        "recall": 0.736,
+        "f1-score": 0.794,
+        "support": 144.0
+      }
+    },
+    "labels": [
+      "neutral",
+      "satisfied",
+      "frustrated",
+      "upset",
+      "distressed"
+    ],
+    "confusion_matrix": [
+      [
+        133,
+        7,
+        0,
+        0,
+        4
+      ],
+      [
+        16,
+        58,
+        13,
+        2,
+        7
+      ],
+      [
+        8,
+        0,
+        116,
+        14,
+        6
+      ],
+      [
+        0,
+        1,
+        9,
+        38,
+        0
+      ],
+      [
+        27,
+        0,
+        10,
+        1,
+        106
+      ]
+    ]
+  },
+  "intensity_ravdess": {
+    "n": 432,
+    "accuracy": 0.664,
+    "macro_f1": 0.659,
+    "per_class": {
+      "medium": {
+        "precision": 0.58,
+        "recall": 0.885,
+        "f1-score": 0.701,
+        "support": 192.0
+      },
+      "high": {
+        "precision": 0.842,
+        "recall": 0.487,
+        "f1-score": 0.617,
+        "support": 240.0
+      }
+    },
+    "labels": [
+      "medium",
+      "high"
+    ],
+    "confusion_matrix": [
+      [
+        170,
+        22
+      ],
+      [
+        123,
+        117
+      ]
+    ]
+  },
+  "tone_cremad": {
+    "n": 3198,
+    "accuracy": 0.623,
+    "macro_f1": 0.473,
+    "per_class": {
+      "neutral": {
+        "precision": 0.756,
+        "recall": 0.796,
+        "f1-score": 0.775,
+        "support": 1855.0
+      },
+      "satisfied": {
+        "precision": 0.337,
+        "recall": 0.557,
+        "f1-score": 0.42,
+        "support": 167.0
+      },
+      "frustrated": {
+        "precision": 0.379,
+        "recall": 0.428,
+        "f1-score": 0.402,
+        "support": 589.0
+      },
+      "upset": {
+        "precision": 0.554,
+        "recall": 0.559,
+        "f1-score": 0.557,
+        "support": 220.0
+      },
+      "distressed": {
+        "precision": 0.573,
+        "recall": 0.128,
+        "f1-score": 0.209,
+        "support": 367.0
+      }
+    },
+    "labels": [
+      "neutral",
+      "satisfied",
+      "frustrated",
+      "upset",
+      "distressed"
+    ],
+    "confusion_matrix": [
+      [
+        1476,
+        109,
+        232,
+        12,
+        26
+      ],
+      [
+        44,
+        93,
+        26,
+        2,
+        2
+      ],
+      [
+        240,
+        25,
+        252,
+        67,
+        5
+      ],
+      [
+        13,
+        3,
+        79,
+        123,
+        2
+      ],
+      [
+        180,
+        46,
+        76,
+        18,
+        47
+      ]
+    ]
+  },
+  "intensity_cremad": {
+    "n": 1343,
+    "accuracy": 0.692,
+    "macro_f1": 0.574,
+    "per_class": {
+      "medium": {
+        "precision": 0.693,
+        "recall": 0.942,
+        "f1-score": 0.799,
+        "support": 869.0
+      },
+      "high": {
+        "precision": 0.689,
+        "recall": 0.234,
+        "f1-score": 0.35,
+        "support": 474.0
+      }
+    },
+    "labels": [
+      "medium",
+      "high"
+    ],
+    "confusion_matrix": [
+      [
+        819,
+        50
+      ],
+      [
+        363,
+        111
+      ]
+    ]
+  },
+  "tone_all": {
+    "n": 3774,
+    "accuracy": 0.647,
+    "macro_f1": 0.554,
+    "per_class": {
+      "neutral": {
+        "precision": 0.753,
+        "recall": 0.805,
+        "f1-score": 0.778,
+        "support": 1999.0
+      },
+      "satisfied": {
+        "precision": 0.442,
+        "recall": 0.574,
+        "f1-score": 0.499,
+        "support": 263.0
+      },
+      "frustrated": {
+        "precision": 0.453,
+        "recall": 0.502,
+        "f1-score": 0.476,
+        "support": 733.0
+      },
+      "upset": {
+        "precision": 0.581,
+        "recall": 0.601,
+        "f1-score": 0.591,
+        "support": 268.0
+      },
+      "distressed": {
+        "precision": 0.746,
+        "recall": 0.299,
+        "f1-score": 0.427,
+        "support": 511.0
+      }
+    },
+    "labels": [
+      "neutral",
+      "satisfied",
+      "frustrated",
+      "upset",
+      "distressed"
+    ],
+    "confusion_matrix": [
+      [
+        1609,
+        116,
+        232,
+        12,
+        30
+      ],
+      [
+        60,
+        151,
+        39,
+        4,
+        9
+      ],
+      [
+        248,
+        25,
+        368,
+        81,
+        11
+      ],
+      [
+        13,
+        4,
+        88,
+        161,
+        2
+      ],
+      [
+        207,
+        46,
+        86,
+        19,
+        153
+      ]
+    ]
+  },
+  "intensity_all": {
+    "n": 1775,
+    "accuracy": 0.686,
+    "macro_f1": 0.615,
+    "per_class": {
+      "medium": {
+        "precision": 0.671,
+        "recall": 0.932,
+        "f1-score": 0.78,
+        "support": 1061.0
+      },
+      "high": {
+        "precision": 0.76,
+        "recall": 0.319,
+        "f1-score": 0.45,
+        "support": 714.0
+      }
+    },
+    "labels": [
+      "medium",
+      "high"
+    ],
+    "confusion_matrix": [
+      [
+        989,
+        72
+      ],
+      [
+        486,
+        228
+      ]
+    ]
+  },
+  "tone_cremad_with_ravdess_only_heads": {
+    "n": 3198,
+    "accuracy": 0.537,
+    "macro_f1": 0.409,
+    "per_class": {
+      "neutral": {
+        "precision": 0.791,
+        "recall": 0.645,
+        "f1-score": 0.71,
+        "support": 1855.0
+      },
+      "satisfied": {
+        "precision": 0.156,
+        "recall": 0.725,
+        "f1-score": 0.257,
+        "support": 167.0
+      },
+      "frustrated": {
+        "precision": 0.395,
+        "recall": 0.447,
+        "f1-score": 0.419,
+        "support": 589.0
+      },
+      "upset": {
+        "precision": 0.568,
+        "recall": 0.491,
+        "f1-score": 0.527,
+        "support": 220.0
+      },
+      "distressed": {
+        "precision": 0.509,
+        "recall": 0.076,
+        "f1-score": 0.133,
+        "support": 367.0
+      }
+    },
+    "labels": [
+      "neutral",
+      "satisfied",
+      "frustrated",
+      "upset",
+      "distressed"
+    ],
+    "confusion_matrix": [
+      [
+        1196,
+        415,
+        213,
+        10,
+        21
+      ],
+      [
+        18,
+        121,
+        26,
+        1,
+        1
+      ],
+      [
+        175,
+        98,
+        263,
+        49,
+        4
+      ],
+      [
+        10,
+        10,
+        91,
+        108,
+        1
+      ],
+      [
+        113,
+        132,
+        72,
+        22,
+        28
+      ]
+    ]
+  },
+  "confidence_calibration": {
+    "ece_raw": 0.107,
+    "ece_calibrated": 0.038,
+    "accuracy": 0.647
+  }
+}

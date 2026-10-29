@@ -1,0 +1,62 @@
+[
+  {
+    "cfg": {
+      "data": "ravdess",
+      "C": 0.1,
+      "balance": false
+    },
+    "ravdess_f1": 0.824,
+    "cremad_f1": 0.435,
+    "score": 0.629
+  },
+  {
+    "cfg": {
+      "data": "ravdess",
+      "C": 0.5,
+      "balance": false
+    },
+    "ravdess_f1": 0.824,
+    "cremad_f1": 0.422,
+    "score": 0.623
+  },
+  {
+    "cfg": {
+      "data": "both",
+      "C": 0.1,
+      "balance": false
+    },
+    "ravdess_f1": 0.785,
+    "cremad_f1": 0.502,
+    "score": 0.643
+  },
+  {
+    "cfg": {
+      "data": "both",
+      "C": 0.1,
+      "balance": true
+    },
+    "ravdess_f1": 0.802,
+    "cremad_f1": 0.484,
+    "score": 0.643
+  },
+  {
+    "cfg": {
+      "data": "both",
+      "C": 0.5,
+      "balance": false
+    },
+    "ravdess_f1": 0.785,
+    "cremad_f1": 0.508,
+    "score": 0.647
+  },
+  {
+    "cfg": {
+      "data": "both",
+      "C": 0.5,
+      "balance": true
+    },
+    "ravdess_f1": 0.807,
+    "cremad_f1": 0.494,
+    "score": 0.651
+  }
+]

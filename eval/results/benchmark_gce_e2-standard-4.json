@@ -1,0 +1,98 @@
+{
+  "label": "gce_e2-standard-4",
+  "machine": {
+    "platform": "Linux-7.0.0-1014-gcp-x86_64-with-glibc2.41",
+    "cpu_count": 4,
+    "threads_used": 4,
+    "processor": ""
+  },
+  "cold_start_seconds": 32.9,
+  "peak_memory_mb": null,
+  "files": 3,
+  "repeats": 1,
+  "total_audio_seconds": 237.8,
+  "total_processing_seconds": 167.3,
+  "rtf_overall": 0.704,
+  "latency_per_file_seconds": {
+    "min": 29.88,
+    "max": 106.16
+  },
+  "stage_share": {
+    "asr": 0.422,
+    "noise": 0.231,
+    "emotion_acoustic": 0.133,
+    "speakers": 0.073,
+    "quality": 0.054,
+    "speech": 0.052,
+    "decode": 0.02,
+    "prosody": 0.012,
+    "emotion_text": 0.002
+  },
+  "cost_per_audio_minute_usd": {
+    "GCE e2-standard-4 us-central1 (4 vCPU, 16 GB, this deployment)": 0.00157,
+    "Hetzner CX32 (4 vCPU, 8 GB)": 0.00013,
+    "AWS c7i.large (2 vCPU, 4 GB)": 0.00105,
+    "AWS c7i.xlarge (4 vCPU, 8 GB)": 0.00209,
+    "HF Spaces CPU upgrade (8 vCPU, 32 GB)": 0.00035
+  },
+  "budget_per_audio_minute_usd": 0.003,
+  "runs": [
+    {
+      "file": "call_001.ogg",
+      "repeat": 0,
+      "audio_seconds": 30.94,
+      "processing_seconds": 31.29,
+      "rtf": 1.011,
+      "stages": {
+        "decode": 0.37,
+        "speech": 0.69,
+        "asr": 11.57,
+        "speakers": 2.42,
+        "emotion_acoustic": 4.71,
+        "emotion_text": 0.09,
+        "prosody": 1.67,
+        "noise": 9.18,
+        "quality": 0.6,
+        "total": 31.29
+      }
+    },
+    {
+      "file": "call_002.ogg",
+      "repeat": 0,
+      "audio_seconds": 34.96,
+      "processing_seconds": 29.88,
+      "rtf": 0.855,
+      "stages": {
+        "decode": 0.41,
+        "speech": 1.19,
+        "asr": 10.05,
+        "speakers": 1.28,
+        "emotion_acoustic": 3.86,
+        "emotion_text": 0.11,
+        "prosody": 0.08,
+        "noise": 10.33,
+        "quality": 2.57,
+        "total": 29.88
+      }
+    },
+    {
+      "file": "call_003.ogg",
+      "repeat": 0,
+      "audio_seconds": 171.92,
+      "processing_seconds": 106.16,
+      "rtf": 0.617,
+      "stages": {
+        "decode": 2.59,
+        "speech": 6.78,
+        "asr": 48.92,
+        "speakers": 8.59,
+        "emotion_acoustic": 13.74,
+        "emotion_text": 0.21,
+        "prosody": 0.34,
+        "noise": 19.13,
+        "quality": 5.85,
+        "total": 106.16
+      }
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "split": "dev",
+  "quality": {
+    "n": 54,
+    "accuracy": 0.519,
+    "macro_f1": 0.468,
+    "per_class": {
+      "clear": {
+        "precision": 0.261,
+        "recall": 1.0,
+        "f1-score": 0.414,
+        "support": 6.0
+      },
+      "slightly_impaired": {
+        "precision": 1.0,
+        "recall": 0.167,
+        "f1-score": 0.286,
+        "support": 24.0
+      },
+      "severely_impaired": {
+        "precision": 0.667,
+        "recall": 0.75,
+        "f1-score": 0.706,
+        "support": 24.0
+      }
+    },
+    "labels": [
+      "clear",
+      "slightly_impaired",
+      "severely_impaired"
+    ],
+    "confusion_matrix": [
+      [
+        6,
+        0,
+        0
+      ],
+      [
+        11,
+        4,
+        9
+      ],
+      [
+        6,
+        0,
+        18
+      ]
+    ]
+  },
+  "quality_by_condition": {
+    "clipping/mild": 0.5,
+    "clipping/severe": 1.0,
+    "low_volume/mild": 0.0,
+    "low_volume/severe": 1.0,
+    "muffled/mild": 0.0,
+    "muffled/severe": 0.0,
+    "none/clean": 1.0,
+    "packet_loss/mild": 0.17,
+    "packet_loss/severe": 1.0
+  }
+}

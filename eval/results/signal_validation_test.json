@@ -1,0 +1,269 @@
+{
+  "split": "test",
+  "noise_present": {
+    "n": 96,
+    "accuracy": 0.979,
+    "macro_f1": 0.973,
+    "per_class": {
+      "False": {
+        "precision": 0.923,
+        "recall": 1.0,
+        "f1-score": 0.96,
+        "support": 24.0
+      },
+      "True": {
+        "precision": 1.0,
+        "recall": 0.972,
+        "f1-score": 0.986,
+        "support": 72.0
+      }
+    },
+    "labels": [
+      "False",
+      "True"
+    ],
+    "confusion_matrix": [
+      [
+        24,
+        0
+      ],
+      [
+        2,
+        70
+      ]
+    ]
+  },
+  "noise_type_given_detected": {
+    "n": 70,
+    "accuracy": 0.7,
+    "by_class": {
+      "baby crying": 1.0,
+      "dog barking": 1.0,
+      "keyboard typing": 1.0,
+      "mechanical noise": 0.65,
+      "road noise": 0.56,
+      "siren": 0.67,
+      "wind": 0.0
+    },
+    "recall_by_snr": {
+      "0.0": 0.92,
+      "10.0": 1.0,
+      "20.0": 1.0
+    },
+    "recall_by_class": {
+      "baby crying": 1.0,
+      "dog barking": 1.0,
+      "keyboard typing": 1.0,
+      "mechanical noise": 0.94,
+      "road noise": 1.0,
+      "siren": 1.0,
+      "wind": 0.89
+    }
+  },
+  "noise_severity": {
+    "n": 96,
+    "accuracy": 0.896,
+    "macro_f1": 0.893,
+    "per_class": {
+      "none": {
+        "precision": 0.923,
+        "recall": 1.0,
+        "f1-score": 0.96,
+        "support": 24.0
+      },
+      "low": {
+        "precision": 1.0,
+        "recall": 0.958,
+        "f1-score": 0.979,
+        "support": 24.0
+      },
+      "medium": {
+        "precision": 0.767,
+        "recall": 0.958,
+        "f1-score": 0.852,
+        "support": 24.0
+      },
+      "high": {
+        "precision": 0.941,
+        "recall": 0.667,
+        "f1-score": 0.78,
+        "support": 24.0
+      }
+    },
+    "labels": [
+      "none",
+      "low",
+      "medium",
+      "high"
+    ],
+    "confusion_matrix": [
+      [
+        24,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        23,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        23,
+        1
+      ],
+      [
+        2,
+        0,
+        6,
+        16
+      ]
+    ]
+  },
+  "false_noise_on_degraded_audio": {
+    "clipping": 0.0,
+    "low_volume": 0.0,
+    "muffled": 0.0,
+    "packet_loss": 0.0
+  },
+  "quality": {
+    "n": 54,
+    "accuracy": 0.926,
+    "macro_f1": 0.897,
+    "per_class": {
+      "clear": {
+        "precision": 0.667,
+        "recall": 1.0,
+        "f1-score": 0.8,
+        "support": 6.0
+      },
+      "slightly_impaired": {
+        "precision": 0.955,
+        "recall": 0.875,
+        "f1-score": 0.913,
+        "support": 24.0
+      },
+      "severely_impaired": {
+        "precision": 1.0,
+        "recall": 0.958,
+        "f1-score": 0.979,
+        "support": 24.0
+      }
+    },
+    "labels": [
+      "clear",
+      "slightly_impaired",
+      "severely_impaired"
+    ],
+    "confusion_matrix": [
+      [
+        6,
+        0,
+        0
+      ],
+      [
+        3,
+        21,
+        0
+      ],
+      [
+        0,
+        1,
+        23
+      ]
+    ]
+  },
+  "quality_by_condition": {
+    "clipping/mild": 0.67,
+    "clipping/severe": 1.0,
+    "low_volume/mild": 1.0,
+    "low_volume/severe": 1.0,
+    "muffled/mild": 1.0,
+    "muffled/severe": 1.0,
+    "none/clean": 1.0,
+    "packet_loss/mild": 0.83,
+    "packet_loss/severe": 0.83
+  },
+  "overlap": {
+    "n": 32,
+    "accuracy": 0.906,
+    "macro_f1": 0.906,
+    "per_class": {
+      "False": {
+        "precision": 0.882,
+        "recall": 0.938,
+        "f1-score": 0.909,
+        "support": 16.0
+      },
+      "True": {
+        "precision": 0.933,
+        "recall": 0.875,
+        "f1-score": 0.903,
+        "support": 16.0
+      }
+    },
+    "labels": [
+      "False",
+      "True"
+    ],
+    "confusion_matrix": [
+      [
+        15,
+        1
+      ],
+      [
+        2,
+        14
+      ]
+    ]
+  },
+  "overlap_by_duration": {
+    "0.0": 0.0,
+    "0.25": 0.12,
+    "1.0": 0.88,
+    "2.0": 0.88
+  },
+  "silence": {
+    "n": 40,
+    "accuracy": 1.0,
+    "macro_f1": 1.0,
+    "per_class": {
+      "False": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 24.0
+      },
+      "True": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 16.0
+      }
+    },
+    "labels": [
+      "False",
+      "True"
+    ],
+    "confusion_matrix": [
+      [
+        24,
+        0
+      ],
+      [
+        0,
+        16
+      ]
+    ]
+  },
+  "silence_by_gap": {
+    "2.0": 0.0,
+    "5.0": 0.0,
+    "8.0": 0.0,
+    "12.0": 1.0,
+    "20.0": 1.0
+  }
+}
