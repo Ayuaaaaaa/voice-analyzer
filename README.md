@@ -1,7 +1,7 @@
 # AutoAce Voice Analyzer
 
 **Live dashboard:** [https://136-119-243-232.sslip.io](https://136-119-243-232.sslip.io)  
-Sign-in: username `autoace`, password `3z0pQ81O8CcuzKA2`.  
+
 **Source:** [https://github.com/Ayuaaaaaa/voice-analyzer](https://github.com/Ayuaaaaaa/voice-analyzer)
 
 Analyses customer phone calls for emotional tone, background noise, audio quality, speaker overlap and
